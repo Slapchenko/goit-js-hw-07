@@ -1,11 +1,10 @@
 import { galleryItems } from './gallery-items.js';
 
-const galleryRef = document.querySelector('.gallery');
+const gallery = document.querySelector('.gallery');
 const galleryItemsMarkup = createGalleryItemsMarkup(galleryItems);
 
-galleryRef.insertAdjacentHTML('beforeend', galleryItemsMarkup);
-
-galleryRef.addEventListener('click', onClick);
+gallery.insertAdjacentHTML('beforeend', galleryItemsMarkup);
+gallery.addEventListener('click', onImageClick);
 
 function createGalleryItemsMarkup(images) {
   return images
@@ -24,7 +23,7 @@ function createGalleryItemsMarkup(images) {
     .join('');
 }
 
-function onClick(event) {
+function onImageClick(event) {
   event.preventDefault();
 
   if (event.target.nodeName !== 'IMG') {
@@ -39,7 +38,6 @@ function onClick(event) {
   document.addEventListener('keydown', event => {
     if (event.code === 'Escape') {
       instance.close();
-      console.log('Keydown: ', event.code);
     }
   });
 }
