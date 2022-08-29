@@ -23,21 +23,35 @@ function createGalleryItemsMarkup(images) {
     .join('');
 }
 
-function onImageClick(event) {
-  event.preventDefault();
+function onImageClick(e) {
+  e.preventDefault();
 
-  if (event.target.nodeName !== 'IMG') {
+  if (e.target.nodeName !== 'IMG') {
     return;
   }
 
-  const instance = basicLightbox.create(`
-    <img src="${event.target.dataset.source}" width="800" height="600">
-`);
-  instance.show();
+  createsBasicLightboxInstance(e);
 
-  document.addEventListener('keydown', event => {
-    if (event.code === 'Escape') {
-      instance.close();
+  checkEscapeKeydown();
+}
+
+function createsBasicLightboxInstance(e) {
+  basicLightbox
+    .create(
+      `
+    <img src="${e.target.dataset.source}" width="800" height="600">
+`
+    )
+    .show();
+}
+
+function checkEscapeKeydown() {
+  document.addEventListener('keydown', onEscapeKeydown);
+
+  function onEscapeKeydown(e) {
+    if (e.code === 'Escape') {
+      document.querySelector('.basicLightbox')?.remove();
+      document.removeEventListener('keydown', onEscapeKeydown);
     }
-  });
+  }
 }
