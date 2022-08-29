@@ -11,15 +11,16 @@ new SimpleLightbox('.gallery a', {
 });
 
 function createGalleryItemsMarkup(images) {
-  return images
-    .map(({ preview, original, description }) => {
-      return `
+  return images.reduce(
+    (acc, { preview, original, description }) =>
+      acc +
+      `
     <li class="gallery__item">
       <a class="gallery__link" href="${original}">
         <img class="gallery__image" src="${preview}" alt="${description}" />
       </a>
     </li>
-    `;
-    })
-    .join('');
+    `,
+    ''
+  );
 }
