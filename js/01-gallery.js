@@ -1,8 +1,8 @@
 import { galleryItems } from './gallery-items.js';
 
+let modalInstance = null;
 const gallery = document.querySelector('.gallery');
 const galleryItemsMarkup = createGalleryItemsMarkup(galleryItems);
-
 gallery.insertAdjacentHTML('beforeend', galleryItemsMarkup);
 gallery.addEventListener('click', onImageClick);
 
@@ -31,22 +31,39 @@ function onImageClick(e) {
     return;
   }
 
-  createsBasicLightboxInstance(e);
+  initModal(e);
+
+  setModalImage(e.target.dataset.source);
+
+  modalInstance.show();
 }
 
-function createsBasicLightboxInstance(e) {
-  const instance = basicLightbox.create(
+function initModal() {
+  modalInstance = basicLightbox.create(
     `
-    <img src="${e.target.dataset.source}" width="800" height="600">
-`
+    <img src="" width="800" height="600">
+`,
+    {
+      onShow: instance => {
+        document.addEventListener('keydown', onKeydown);
+      },
+      onClose: instance => {
+        document.removeEventListener('keydown', onKeydown);
+      },
+    }
   );
 
-  instance.show(() => document.addEventListener('keydown', onEscapeKeydown));
+  return modalInstance;
+}
 
-  function onEscapeKeydown(e) {
-    if (e.code === 'Escape') {
-      instance.close(() => document.removeEventListener('keydown', onEscapeKeydown));
-    }
+function setModalImage(link) {
+  const imageInsideModal = modalInstance.element();
+  imageInsideModal.querySelector('img').setAttribute('src', `${link}`);
+}
+
+function onKeydown(e) {
+  if (e.code === 'Escape') {
+    modalInstance.close();
   }
 }
 
@@ -85,27 +102,20 @@ function createsBasicLightboxInstance(e) {
 //   }
 
 //   createsBasicLightboxInstance(e);
-
-//   checkEscapeKeydown();
 // }
 
 // function createsBasicLightboxInstance(e) {
-//   basicLightbox
-//     .create(
-//       `
+//   const instance = basicLightbox.create(
+//     `
 //     <img src="${e.target.dataset.source}" width="800" height="600">
 // `
-//     )
-//     .show();
-// }
+//   );
 
-// function checkEscapeKeydown() {
-//   document.addEventListener('keydown', onEscapeKeydown);
+//   instance.show(() => document.addEventListener('keydown', onEscapeKeydown));
 
 //   function onEscapeKeydown(e) {
 //     if (e.code === 'Escape') {
-//       document.querySelector('.basicLightbox')?.remove();
-//       document.removeEventListener('keydown', onEscapeKeydown);
+//       instance.close(() => document.removeEventListener('keydown', onEscapeKeydown));
 //     }
 //   }
 // }
