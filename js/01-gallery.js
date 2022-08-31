@@ -39,19 +39,14 @@ function onImageClick(e) {
 }
 
 function initModal() {
-  modalInstance = basicLightbox.create(
-    `
-    <img src="" width="800" height="600">
-`,
-    {
-      onShow: instance => {
-        document.addEventListener('keydown', onKeydown);
-      },
-      onClose: instance => {
-        document.removeEventListener('keydown', onKeydown);
-      },
-    }
-  );
+  modalInstance = basicLightbox.create(`<img src="" width="800" height="600">`, {
+    onShow: instance => {
+      document.addEventListener('keydown', onKeydown);
+    },
+    onClose: instance => {
+      document.removeEventListener('keydown', onKeydown);
+    },
+  });
 
   return modalInstance;
 }
